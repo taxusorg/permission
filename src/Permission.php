@@ -59,6 +59,13 @@ abstract class Permission implements ArrayAccess, PermissionInterface
      */
     public function allows(RoleInterface $roles = null)
     {
+        $before = static::getManager()->getBefore();
+
+        foreach ($before as $item) {
+            if (true === call_user_func($item, $this))
+                return true;
+        }
+
         if (! $roles) $roles = static::getDefaultRoles();
 
         if (in_array($this->getKeyAttribute(), $roles->permitKeys()->all())) {

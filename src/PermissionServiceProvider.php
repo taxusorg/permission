@@ -25,6 +25,16 @@ class PermissionServiceProvider extends ServiceProvider
             if ($auth->check())
                 $manager->setDefaultUser($auth->user());
 
+            $manager->addBefore(function ($permission) use ($auth) {
+                if (in_array($auth->user()->id, $this->getConfigRootUserId()))
+                    return true;
+                if ($auth->user()->getRoles()
+                    ->pluck('id')->intersect($this->getConfigRootRoleId())->isNotEmpty())
+                    return true;
+
+                return false;
+            });
+
             return $manager;
         });
     }
@@ -71,5 +81,15 @@ class PermissionServiceProvider extends ServiceProvider
     protected function getConfigGuard()
     {
         return $this->app['config']['permission.guard'];
+    }
+
+    protected function getConfigRootUserId()
+    {
+        return $this->app['config']['permission.root_user.id'] ?: [];
+    }
+
+    protected function getConfigRootRoleId()
+    {
+        return $this->app['config']['permission.root_role.id'] ?: [];
     }
 }

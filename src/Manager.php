@@ -23,6 +23,11 @@ class Manager
     protected $default_user;
 
     /**
+     * @var array
+     */
+    protected $before = [];
+
+    /**
      * Manager constructor.
      * @param null|string|Permission|array $permission
      * @throws \Error
@@ -129,5 +134,21 @@ class Manager
         }
 
         return $this->default_roles ?: new RoleCollection();
+    }
+
+    /**
+     * @param \Closure $closure
+     */
+    public function addBefore(\Closure $closure)
+    {
+        $this->before[] = $closure;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBefore()
+    {
+        return $this->before;
     }
 }
