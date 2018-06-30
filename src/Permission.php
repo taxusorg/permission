@@ -54,15 +54,17 @@ abstract class Permission implements ArrayAccess, PermissionInterface
 
     /**
      * @param RoleInterface|null $roles
+     * @param bool $throw
      * @return bool
      * @throws FrameworkError
+     * @throws AccessDeniedException
      */
-    public function allows(RoleInterface $roles = null)
+    public function allows(RoleInterface $roles = null, $throw = false)
     {
         $before = static::getManager()->getBefore();
 
         foreach ($before as $item) {
-            if (true === call_user_func($item, $this))
+            if (true === call_user_func($item, $this, static::getManager()))
                 return true;
         }
 
@@ -72,21 +74,29 @@ abstract class Permission implements ArrayAccess, PermissionInterface
             return true;
         }
 
+        if ($throw)
+            throw new AccessDeniedException('Permission denied.');
+
         return false;
     }
 
     /**
      * @param RoleInterface|null $roles
+     * @param bool $throw
      * @return true
      * @throws AccessDeniedException
      * @throws FrameworkError
      */
-    static public function check(RoleInterface $roles = null)
+    static public function check(RoleInterface $roles = null, $throw = true)
     {
         $instance = static::getInstance();
 
-        if (! $instance->allows($roles))
-            throw new AccessDeniedException('Permission denied.');
+        if (! $instance->allows($roles)) {
+            if ($throw)
+                throw new AccessDeniedException('Permission denied.');
+
+            return false;
+        }
 
         return true;
     }
@@ -101,7 +111,7 @@ abstract class Permission implements ArrayAccess, PermissionInterface
     }
 
     /**
-     * @return mixed
+     * @return $this
      * @throws FrameworkError
      */
     static public function getInstance()

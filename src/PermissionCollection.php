@@ -6,10 +6,10 @@ use Illuminate\Support\Collection;
 
 class PermissionCollection extends Collection implements PermissionInterface
 {
-    public function allows(RoleInterface $role = null)
+    public function allows(RoleInterface $role = null, $throw = false)
     {
         foreach ($this as $item) {
-            if ($item->check($role))
+            if ($item->check($role, $throw))
                 return true;
         }
 

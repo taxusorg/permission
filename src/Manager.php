@@ -22,6 +22,8 @@ class Manager
      */
     protected $default_user;
 
+    protected $default_user_closure;
+
     /**
      * @var array
      */
@@ -108,11 +110,18 @@ class Manager
         $this->default_user = $user;
     }
 
+    public function setDefaultUserClosure(\Closure $closure)
+    {
+        $this->default_user_closure = $closure;
+    }
+
     /**
      * @return UserInterface
      */
     public function getDefaultUser()
     {
+        if (! $this->default_user && $this->default_user_closure)
+            $this->setDefaultUser(call_user_func($this->default_user_closure));
         return $this->default_user;
     }
 
