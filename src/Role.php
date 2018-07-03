@@ -2,147 +2,92 @@
 
 namespace Taxusorg\Permission;
 
-use Closure;
-use Illuminate\Database\Eloquent\Model;
-use Taxusorg\Permission\Exceptions\FrameworkError;
-use Taxusorg\Permission\RoleCollection as Collection;
-use Taxusorg\Permission\Traits\ManagerAble;
+use Taxusorg\Permission\Contracts\RoleInterface;
+use Taxusorg\Permission\Contracts\RoleResourceInterface;
 
-class Role extends Model implements RoleInterface
+class Role implements RoleInterface
 {
-    use ManagerAble;
+    protected $resource;
 
-    /**
-     * @var string
-     */
-    protected $permit_key_name = 'permit_key';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['name'];
-
-    /**
-     * @return string
-     */
-    public function getPermitKeyName()
+    public function __construct(RoleResourceInterface  $resource)
     {
-        return $this->permit_key_name;
+        $this->resource = $resource;
+    }
+
+    public function key()
+    {
+        return $this->resource->key();
+    }
+
+    public function name()
+    {
+        return $this->resource->name();
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function rolePermits()
-    {
-        return $this->hasMany(RolePermit::class);
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection|static
-     */
-    public function permitKeys()
-    {
-        return $this->rolePermits()->get()->pluck($this->getPermitKeyName())->unique();
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection|Role
-     */
-    public function getPermitKeysAttribute()
-    {
-        return $this->permitKeys();
-    }
-
-    /*public function permissions()
-    {
-        return ;
-    }*/
-
-    /**
-     * @return PermissionCollection
-     * @throws FrameworkError
-     */
-    public function getPermitsAttribute()
-    {
-        return static::getManager()->whereKeys($this->permitKeys());
-    }
-
-    /**
-     * @param $permissions
-     * @return \Illuminate\Database\Eloquent\Collection
-     * @throws FrameworkError
-     */
-    public function attachPermits($permissions)
-    {
-        $keys = static::getManager()->whereKeys($permissions)->keys();
-
-        return $this->rolePermits()->createMany($keys->map(function($item){
-            return [$this->getPermitKeyName() => $item];
-        })->all());
-    }
-
-    /**
-     * @param $permissions
-     * @return mixed
-     * @throws FrameworkError
-     */
-    public function detachPermits($permissions)
-    {
-        $keys = static::getManager()->whereKeys($permissions)->keys();
-
-        return $this->rolePermits()->whereIn($this->getPermitKeyName(), $keys->all())->delete();
-    }
-
-    /**
-     * @param $permissions
-     * @return \Illuminate\Database\Eloquent\Collection
-     * @throws FrameworkError
-     */
-    public function syncPermits($permissions)
-    {
-        $keys = static::getManager()->whereKeys($permissions)->keys();
-
-        $allows_keys = $this->rolePermits()->get()->pluck($this->getPermitKeyName());
-
-        $delete_keys = $allows_keys->filter(function ($item) use ($keys) {
-            return ! in_array($item, $keys->all());
-        });
-        $insert_keys = $keys->diff($allows_keys);
-
-        $this->rolePermits()->whereIn($this->getPermitKeyName(), $delete_keys->all())->delete();
-        return $this->rolePermits()->createMany($insert_keys->map(function($item){
-            return [$this->getPermitKeyName() => $item];
-        })->all());
-    }
-
-    /**
-     * @param array $models
-     * @return RoleCollection
-     */
-    public function newCollection(array $models = [])
-    {
-        return new Collection($models);
-    }
-
-    /**
-     * @param $permission
+     * @param string|array ...$permissions
      * @return bool
-     * @throws FrameworkError
      */
-    public function allows($permission)
+    public function attach(...$permissions)
     {
-        $permission = static::getManager()->whereKeys($permission);
+        $permissions = $this->paramFormat($permissions);
 
-        return $permission->allows($this);
+        return $this->resource->attach($permissions);
     }
 
     /**
-     * @return RoleCollection
-     * @throws FrameworkError
+     * @param string|array ...$permissions string
+     * @return bool
      */
-    static public function getDefaultRoles()
+    public function detach(...$permissions)
     {
-        return static::getManager()->getDefaultRoles();
+        $permissions = $this->paramFormat($permissions);
+
+        return $this->resource->detach($permissions);
+    }
+
+    /**
+     * @param string|array ...$permissions
+     * @return bool
+     */
+    public function sync(...$permissions)
+    {
+        $permissions = $this->paramFormat($permissions);
+
+        return $this->resource->sync($permissions);
+    }
+
+    /**
+     * @param string|array ...$permissions
+     * @return bool
+     */
+    public function toggle(...$permissions)
+    {
+        $permissions = $this->paramFormat($permissions);
+
+        return $this->resource->toggle($permissions);
+    }
+
+    public function check($permission)
+    {
+        // TODO: Implement check() method.
+    }
+
+    public function can($permission)
+    {
+        // TODO: Implement can() method.
+    }
+
+    protected function paramFormat($params, $data = [])
+    {
+        foreach ($params as $param) {
+            if (is_string($param)) {
+                $data[] = $param;
+            } elseif (is_array($param)) {
+                $data = $this->paramFormat($param, $data);
+            }
+        }
+
+        return $data;
     }
 }
