@@ -2,7 +2,7 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleInterface
+interface RoleInterface extends RoleVerifiableInterface
 {
     public function key();
 
@@ -31,8 +31,4 @@ interface RoleInterface
      * @return boolean
      */
     public function toggle(...$permissions);
-
-    public function check($permission);
-
-    public function can($permission);
 }

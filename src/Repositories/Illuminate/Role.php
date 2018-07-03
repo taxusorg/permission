@@ -8,6 +8,8 @@ use Taxusorg\Permission\Contracts\RoleResourceInterface;
 
 class Role extends Model implements RoleResourceInterface, RoleRepositoryInterface
 {
+    protected $fillable = ['name'];
+
     public function permissions()
     {
         return $this->hasMany(Permit::class, 'role_id', 'id');
