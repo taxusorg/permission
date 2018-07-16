@@ -14,8 +14,11 @@ class SimpleTest extends TestCase
         $repository = new RoleRepository();
         $role = new Role($repository->getByName('test_role'));
 
-        $role->toggle(['test3', 'test4']);
+        $f = $role->can('test1');
+        $t = $role->can('test4');
 
+        $this->assertFalse($f);
+        $this->assertTrue($t);
         $this->assertTrue(true);
     }
 }
