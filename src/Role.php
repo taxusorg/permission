@@ -72,21 +72,34 @@ class Role implements RoleInterface
     /**
      * @param $permission
      * @return bool
-     * @throws AccessDeniedException
      */
     public function check($permission)
     {
-        if (! $this->can($permission))
-            throw new AccessDeniedException('Access Denied.');
-
-        return true;
+        return $this->can($permission);
     }
 
+    /**
+     * @param $permission
+     * @return bool
+     */
     public function can($permission)
     {
         $permits = $this->resource->permits();
 
         return in_array($permission, $permits);
+    }
+
+    /**
+     * @param $permission
+     * @return bool|true
+     * @throws AccessDeniedException
+     */
+    public function allowsOrFail($permission)
+    {
+        if (! $this->can($permission))
+            throw new AccessDeniedException('Access Denied.');
+
+        return true;
     }
 
     protected function paramFormat($params, $data = [])

@@ -4,6 +4,7 @@ namespace Taxusorg\Permission;
 
 use Taxusorg\Permission\Contracts\RoleCollectionInterface;
 use Taxusorg\Permission\Contracts\RoleInterface;
+use Taxusorg\Permission\Exceptions\AccessDeniedException;
 
 class RoleCollection implements RoleCollectionInterface
 {
@@ -29,14 +30,40 @@ class RoleCollection implements RoleCollectionInterface
         return array_pull($this->roles, $key, null);
     }
 
+    /**
+     * @param $permission
+     * @return bool
+     */
     public function check($permission)
     {
-        // TODO: Implement check() method.
+        return $this->can($permission);
     }
 
+    /**
+     * @param $permission
+     * @return bool
+     */
     public function can($permission)
     {
-        // TODO: Implement can() method.
+        foreach ($this as $item) {
+            if ($item->can($permission))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $permission
+     * @return true
+     * @throws AccessDeniedException
+     */
+    public function allowsOrFail($permission)
+    {
+        if (! $this->can($permission))
+            throw new AccessDeniedException('Access Denied.');
+
+        return true;
     }
 
     public function getIterator()
