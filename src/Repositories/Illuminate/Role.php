@@ -28,9 +28,27 @@ class Role extends Model implements RoleResourceInterface, RoleRepositoryInterfa
         return $this->newQuery()->find($key);
     }
 
+    /**
+     * @param array $keys
+     * @return \Taxusorg\Permission\Contracts\RoleResourceCollectionInterface| \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function finds(array $keys)
+    {
+        return $this->newQuery()->whereIn($this->getKeyName(), $keys)->get();
+    }
+
     public function getByName($name)
     {
         return $this->newQuery()->where('name', $name)->first();
+    }
+
+    /**
+     * @param array $models
+     * @return RoleCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new RoleCollection($models);
     }
 
     public function key()

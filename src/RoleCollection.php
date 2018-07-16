@@ -2,29 +2,45 @@
 
 namespace Taxusorg\Permission;
 
-use Illuminate\Support\Collection;
+use Taxusorg\Permission\Contracts\RoleCollectionInterface;
+use Taxusorg\Permission\Contracts\RoleInterface;
 
-class RoleCollection extends Collection implements RoleInterface
+class RoleCollection implements RoleCollectionInterface
 {
-    /**
-     * @return Collection|static
-     */
-    public function permitKeys()
+    protected $roles = [];
+
+    public function push(RoleInterface $role)
     {
-        return $this->pluck('permit_keys')->flatten(1)->unique();
+        $this->roles[] = $role;
     }
 
-    /**
-     * @param $permission
-     * @return bool
-     */
-    public function allows($permission)
+    public function pop()
     {
-        foreach ($this as $item) {
-            if ($item->allows($permission))
-                return true;
-        }
+        return array_pop($this->roles);
+    }
 
-        return false;
+    public function prepend(RoleInterface $role, $key = null)
+    {
+        array_prepend($this->roles, $role, $key);
+    }
+
+    public function pull($key = null)
+    {
+        return array_pull($this->roles, $key, null);
+    }
+
+    public function check($permission)
+    {
+        // TODO: Implement check() method.
+    }
+
+    public function can($permission)
+    {
+        // TODO: Implement can() method.
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->roles);
     }
 }

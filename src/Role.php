@@ -4,12 +4,13 @@ namespace Taxusorg\Permission;
 
 use Taxusorg\Permission\Contracts\RoleInterface;
 use Taxusorg\Permission\Contracts\RoleResourceInterface;
+use Taxusorg\Permission\Exceptions\AccessDeniedException;
 
 class Role implements RoleInterface
 {
     protected $resource;
 
-    public function __construct(RoleResourceInterface  $resource)
+    public function __construct(RoleResourceInterface $resource)
     {
         $this->resource = $resource;
     }
@@ -68,14 +69,24 @@ class Role implements RoleInterface
         return $this->resource->toggle($permissions);
     }
 
+    /**
+     * @param $permission
+     * @return bool
+     * @throws AccessDeniedException
+     */
     public function check($permission)
     {
-        // TODO: Implement check() method.
+        if (! $this->can($permission))
+            throw new AccessDeniedException('Access Denied.');
+
+        return true;
     }
 
     public function can($permission)
     {
-        // TODO: Implement can() method.
+        $permits = $this->resource->permits();
+
+        return in_array($permission, $permits);
     }
 
     protected function paramFormat($params, $data = [])
