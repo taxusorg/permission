@@ -2,11 +2,11 @@
 
 namespace Taxusorg\Permission;
 
-use Taxusorg\Permission\Contracts\RoleFactoryInterface;
-use Taxusorg\Permission\Contracts\RoleRepositoryInterface;
-use Taxusorg\Permission\Contracts\RoleResourceInterface;
+use Taxusorg\Permission\Contracts\FactoryInterface;
+use Taxusorg\Permission\Contracts\RepositoryInterface;
+use Taxusorg\Permission\Contracts\ResourceInterface;
 
-class Factory implements RoleFactoryInterface
+class Factory implements FactoryInterface
 {
     protected $repository;
 
@@ -14,7 +14,7 @@ class Factory implements RoleFactoryInterface
 
     protected $roles_name = [];
 
-    public function __construct(RoleRepositoryInterface $repository)
+    public function __construct(RepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -61,7 +61,7 @@ class Factory implements RoleFactoryInterface
         return false;
     }
 
-    protected function resolveRole(RoleResourceInterface $resource)
+    protected function resolveRole(ResourceInterface $resource)
     {
         $role = new Role($resource);
         

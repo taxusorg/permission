@@ -3,14 +3,14 @@
 namespace Taxusorg\Permission;
 
 use Taxusorg\Permission\Contracts\RoleInterface;
-use Taxusorg\Permission\Contracts\RoleResourceInterface;
+use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Exceptions\AccessDeniedException;
 
 class Role implements RoleInterface
 {
     protected $resource;
 
-    public function __construct(RoleResourceInterface $resource)
+    public function __construct(ResourceInterface $resource)
     {
         $this->resource = $resource;
     }

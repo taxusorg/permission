@@ -2,7 +2,7 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleCollectionInterface extends RoleVerifiableInterface, \IteratorAggregate
+interface RoleCollectionInterface extends VerifiableInterface, \IteratorAggregate
 {
     /**
      * @param RoleInterface $role

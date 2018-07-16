@@ -2,7 +2,7 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleFactoryInterface
+interface FactoryInterface
 {
     public function getRole($key);
 

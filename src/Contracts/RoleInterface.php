@@ -2,7 +2,7 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleInterface extends RoleVerifiableInterface
+interface RoleInterface extends VerifiableInterface
 {
     public function key();
 

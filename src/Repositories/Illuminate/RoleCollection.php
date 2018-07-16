@@ -3,10 +3,10 @@
 namespace Taxusorg\Permission\Repositories\Illuminate;
 
 use Illuminate\Database\Eloquent\Collection;
-use Taxusorg\Permission\Contracts\RoleResourceCollectionInterface;
-use Taxusorg\Permission\Contracts\RoleResourceInterface;
+use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
+use Taxusorg\Permission\Contracts\ResourceInterface;
 
-class RoleCollection implements RoleResourceCollectionInterface
+class RoleCollection implements ResourceCollectionInterface
 {
     protected $collection;
 
@@ -15,7 +15,7 @@ class RoleCollection implements RoleResourceCollectionInterface
         $this->collection = new Collection($items);
     }
 
-    public function push(RoleResourceInterface $resource)
+    public function push(ResourceInterface $resource)
     {
         return $this->collection->push($resource);
     }
@@ -25,7 +25,7 @@ class RoleCollection implements RoleResourceCollectionInterface
         return $this->collection->pop();
     }
 
-    public function prepend(RoleResourceInterface $resource, $key)
+    public function prepend(ResourceInterface $resource, $key)
     {
         return $this->collection->prepend($resource, $key);
     }

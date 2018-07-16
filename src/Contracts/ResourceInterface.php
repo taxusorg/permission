@@ -2,7 +2,7 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleResourceInterface
+interface ResourceInterface
 {
     public function key();
 

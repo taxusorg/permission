@@ -4,7 +4,7 @@ namespace Taxusorg\Permission\Contracts;
 
 use Taxusorg\Permission\Exceptions\AccessDeniedException;
 
-interface RoleVerifiableInterface
+interface VerifiableInterface
 {
     /**
      * @param $permission

@@ -3,10 +3,10 @@
 namespace Taxusorg\Permission\Repositories\Illuminate;
 
 use Illuminate\Database\Eloquent\Model;
-use Taxusorg\Permission\Contracts\RoleRepositoryInterface;
-use Taxusorg\Permission\Contracts\RoleResourceInterface;
+use Taxusorg\Permission\Contracts\RepositoryInterface;
+use Taxusorg\Permission\Contracts\ResourceInterface;
 
-class Role extends Model implements RoleResourceInterface, RoleRepositoryInterface
+class Role extends Model implements ResourceInterface, RepositoryInterface
 {
     protected $fillable = ['name'];
 
@@ -30,7 +30,7 @@ class Role extends Model implements RoleResourceInterface, RoleRepositoryInterfa
 
     /**
      * @param array $keys
-     * @return \Taxusorg\Permission\Contracts\RoleResourceCollectionInterface| \Illuminate\Database\Eloquent\Collection|static[]
+     * @return \Taxusorg\Permission\Contracts\ResourceCollectionInterface| \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function finds(array $keys)
     {

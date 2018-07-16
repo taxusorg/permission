@@ -2,23 +2,23 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleRepositoryInterface
+interface RepositoryInterface
 {
     /**
      * @param $key
-     * @return RoleResourceInterface
+     * @return ResourceInterface
      */
     public function find($key);
 
     /**
      * @param array $keys
-     * @return RoleResourceCollectionInterface
+     * @return ResourceCollectionInterface
      */
     public function finds(array $keys);
 
     /**
      * @param $name
-     * @return RoleResourceInterface
+     * @return ResourceInterface
      */
     public function getByName($name);
 }
