@@ -3,8 +3,8 @@
 namespace Taxusorg\Permission\Repositories\Illuminate;
 
 use Illuminate\Database\Eloquent\Collection;
-use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
 use Taxusorg\Permission\Contracts\ResourceInterface;
+use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
 
 class RoleCollection implements ResourceCollectionInterface
 {
@@ -20,7 +20,7 @@ class RoleCollection implements ResourceCollectionInterface
         return $this->collection->push($resource);
     }
 
-    public function pop()
+    public function pop() : ResourceInterface
     {
         return $this->collection->pop();
     }
@@ -30,7 +30,7 @@ class RoleCollection implements ResourceCollectionInterface
         return $this->collection->prepend($resource, $key);
     }
 
-    public function pull($key)
+    public function pull($key) : ResourceInterface
     {
         return $this->collection->pull($key);
     }
@@ -38,6 +38,34 @@ class RoleCollection implements ResourceCollectionInterface
     public function getIterator()
     {
         return $this->collection->getIterator();
+    }
+
+    public function attach(iterable $permissions)
+    {
+        $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
+            $resource->attach($permissions);
+        });
+    }
+
+    public function detach(iterable $permissions)
+    {
+        $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
+            $resource->detach($permissions);
+        });
+    }
+
+    public function sync(iterable $permissions)
+    {
+        $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
+            $resource->sync($permissions);
+        });
+    }
+
+    public function toggle(iterable $permissions)
+    {
+        $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
+            $resource->toggle($permissions);
+        });
     }
 
     public function __call($name, $arguments)

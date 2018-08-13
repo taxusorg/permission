@@ -2,38 +2,17 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface ResourceInterface
+interface ResourceInterface extends ResourceSyncInterface
 {
-    public function key();
+    public function getKey();
 
-    public function name();
+    /**
+     * @return string
+     */
+    public function getName() : string;
 
     /**
      * @return array
      */
-    public function permits();
-
-    /**
-     * @param array $permissions
-     * @return boolean
-     */
-    public function attach(array $permissions);
-
-    /**
-     * @param array $permissions
-     * @return boolean
-     */
-    public function detach(array $permissions);
-
-    /**
-     * @param array $permissions
-     * @return boolean
-     */
-    public function sync(array $permissions);
-
-    /**
-     * @param array $permissions
-     * @return boolean
-     */
-    public function toggle(array $permissions);
+    public function getPermits() : array;
 }

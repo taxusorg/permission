@@ -2,7 +2,10 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleCollectionInterface extends VerifiableInterface, \IteratorAggregate
+use ArrayAccess;
+use IteratorAggregate;
+
+interface RoleCollectionInterface extends VerifiableInterface, RoleSyncInterface, ArrayAccess, IteratorAggregate
 {
     /**
      * @param RoleInterface $role
@@ -13,18 +16,36 @@ interface RoleCollectionInterface extends VerifiableInterface, \IteratorAggregat
     /**
      * @return RoleInterface
      */
-    public function pop();
+    public function pop() : RoleInterface;
 
     /**
-     * @param RoleInterface $role
-     * @param $key
-     * @return mixed
-     */
-    public function prepend(RoleInterface $role, $key = null);
-
-    /**
-     * @param $key
+     * @param mixed $offset
      * @return RoleInterface
      */
-    public function pull($key = null);
+    public function offsetGet($offset);
+
+    /**
+     * @param $name
+     * @return boolean
+     */
+    public function __isset($name);
+
+    /**
+     * @param $name
+     * @return RoleInterface
+     */
+    public function __get($name);
+
+    /**
+     * @param $name
+     * @param $value
+     * @return mixed
+     */
+    public function __set($name, $value);
+
+    /**
+     * @param $name
+     * @return void
+     */
+    public function __unset($name);
 }

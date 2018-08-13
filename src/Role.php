@@ -2,27 +2,37 @@
 
 namespace Taxusorg\Permission;
 
-use Taxusorg\Permission\Contracts\RoleInterface;
+use Taxusorg\Permission\Contracts\FactoryInterface;
 use Taxusorg\Permission\Contracts\ResourceInterface;
+use Taxusorg\Permission\Contracts\RoleInterface;
 use Taxusorg\Permission\Exceptions\AccessDeniedException;
 
 class Role implements RoleInterface
 {
     protected $resource;
 
-    public function __construct(ResourceInterface $resource)
+    protected $factory;
+
+    public function __construct(ResourceInterface $resource, FactoryInterface $factory)
     {
         $this->resource = $resource;
+
+        $this->factory = $factory;
     }
 
-    public function key()
+    public function getKey()
     {
-        return $this->resource->key();
+        return $this->resource->getKey();
     }
 
-    public function name()
+    public function getName() : string
     {
-        return $this->resource->name();
+        return $this->resource->getName();
+    }
+
+    public function getPermits() : array
+    {
+        return array_intersect($this->resource->getPermits(), $this->factory->getPermissions());
     }
 
     /**
@@ -31,9 +41,13 @@ class Role implements RoleInterface
      */
     public function attach(...$permissions)
     {
-        $permissions = $this->paramFormat($permissions);
+        $permissions = array_intersect($this->paramFormat($permissions), $this->factory->getPermissions());
 
-        return $this->resource->attach($permissions);
+        $this->resource->attach($permissions);
+
+        $this->flushResource();
+
+        return true;
     }
 
     /**
@@ -44,7 +58,11 @@ class Role implements RoleInterface
     {
         $permissions = $this->paramFormat($permissions);
 
-        return $this->resource->detach($permissions);
+        $this->resource->detach($permissions);
+
+        $this->flushResource();
+
+        return true;
     }
 
     /**
@@ -53,40 +71,60 @@ class Role implements RoleInterface
      */
     public function sync(...$permissions)
     {
-        $permissions = $this->paramFormat($permissions);
+        $permissions = array_intersect($this->paramFormat($permissions), $this->factory->getPermissions());
 
-        return $this->resource->sync($permissions);
+        $this->resource->sync($permissions);
+
+        $this->flushResource();
+
+        return true;
     }
 
     /**
      * @param string|array ...$permissions
-     * @return bool
+     * @return boolean
      */
     public function toggle(...$permissions)
     {
-        $permissions = $this->paramFormat($permissions);
+        $params = $this->paramFormat($permissions);
 
-        return $this->resource->toggle($permissions);
+        $permissions = array_intersect($params, $this->factory->getPermissions());
+        $deletes = array_diff($params, $this->factory->getPermissions());
+
+        $this->resource->detach($deletes);
+        $this->resource->toggle($permissions);
+
+        $this->flushResource();
+
+        return true;
     }
 
     /**
      * @param $permission
      * @return bool
      */
-    public function check($permission)
+    public function check($permission) : bool
     {
-        return $this->can($permission);
-    }
+        if ($closure = $this->factory->getBeforeChecking())
+        {
+            $result = call_user_func($closure, $permission, $this, $this->factory);
+            if ($result === true || $result === false) {
+                return $result;
+            }
+        }
 
-    /**
-     * @param $permission
-     * @return bool
-     */
-    public function can($permission)
-    {
-        $permits = $this->resource->permits();
+        $permits = $this->getPermits();
 
         return in_array($permission, $permits);
+    }
+
+    /**
+     * @param $permission
+     * @return bool
+     */
+    public function can($permission) : bool
+    {
+        return $this->check($permission);
     }
 
     /**
@@ -102,16 +140,29 @@ class Role implements RoleInterface
         return true;
     }
 
-    protected function paramFormat($params, $data = [])
+    /**
+     * @param $params
+     * @param array|[] $data
+     * @return array
+     */
+    protected function paramFormat(iterable $params, $data = [])
     {
         foreach ($params as $param) {
             if (is_string($param)) {
                 $data[] = $param;
-            } elseif (is_array($param)) {
+            } elseif (is_array($param) || $param instanceof \Traversable) {
                 $data = $this->paramFormat($param, $data);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * @return void
+     */
+    protected function flushResource()
+    {
+        $this->resource = $this->factory->getRepository()->getRole($this->getKey());
     }
 }

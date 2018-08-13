@@ -4,19 +4,18 @@ namespace Taxusorg\Permission\Contracts;
 
 use IteratorAggregate;
 
-interface ResourceCollectionInterface extends IteratorAggregate
+interface ResourceCollectionInterface extends IteratorAggregate, ResourceSyncInterface
 {
-
     /**
      * @return ResourceInterface
      */
-    public function pop();
+    public function pop() : ResourceInterface;
 
     /**
      * @param $key
      * @return ResourceInterface
      */
-    public function pull($key);
+    public function pull($key) : ResourceInterface;
 
     /**
      * @param ResourceInterface $resource

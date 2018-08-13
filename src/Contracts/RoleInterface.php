@@ -2,33 +2,20 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-interface RoleInterface extends VerifiableInterface
+interface RoleInterface extends VerifiableInterface, RoleSyncInterface
 {
-    public function key();
-
-    public function name();
+    /**
+     * @return string
+     */
+    public function getName() : string;
 
     /**
-     * @param string|array ...$permissions string
-     * @return boolean
+     * @return mixed
      */
-    public function attach(...$permissions);
+    public function getKey();
 
     /**
-     * @param string|array ...$permissions string
-     * @return boolean
+     * @return array
      */
-    public function detach(...$permissions);
-
-    /**
-     * @param string|array ...$permissions string
-     * @return boolean
-     */
-    public function sync(...$permissions);
-
-    /**
-     * @param string|array ...$permissions string
-     * @return boolean
-     */
-    public function toggle(...$permissions);
+    public function getPermits() : array;
 }

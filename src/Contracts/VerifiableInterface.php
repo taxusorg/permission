@@ -2,7 +2,6 @@
 
 namespace Taxusorg\Permission\Contracts;
 
-use Taxusorg\Permission\Exceptions\AccessDeniedException;
 
 interface VerifiableInterface
 {
@@ -10,18 +9,18 @@ interface VerifiableInterface
      * @param $permission
      * @return bool
      */
-    public function check($permission);
+    public function check($permission) : bool;
 
     /**
      * @param $permission
      * @return bool
      */
-    public function can($permission);
+    public function can($permission) : bool;
 
     /**
      * @param $permission
      * @return true
-     * @throws AccessDeniedException
+     * @throws \Taxusorg\Permission\Exceptions\AccessDeniedException
      */
     public function allowsOrFail($permission);
 }
