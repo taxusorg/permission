@@ -6,7 +6,7 @@ interface RepositoryInterface
 {
     /**
      * @param $key
-     * @return ResourceInterface
+     * @return ResourceInterface|null
      */
     public function getRole($key);
 
@@ -18,7 +18,7 @@ interface RepositoryInterface
 
     /**
      * @param $name
-     * @return ResourceInterface
+     * @return ResourceInterface|null
      */
     public function getRoleByName($name);
 

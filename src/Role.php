@@ -103,7 +103,7 @@ class Role implements RoleInterface
      * @param $permission
      * @return bool
      */
-    public function check($permission) : bool
+    public function check(string $permission) : bool
     {
         if ($closure = $this->factory->getBeforeChecking())
         {
@@ -122,7 +122,16 @@ class Role implements RoleInterface
      * @param $permission
      * @return bool
      */
-    public function can($permission) : bool
+    public function can(string $permission) : bool
+    {
+        return $this->check($permission);
+    }
+
+    /**
+     * @param string $permission
+     * @return bool
+     */
+    public function allows(string $permission): bool
     {
         return $this->check($permission);
     }
@@ -132,7 +141,7 @@ class Role implements RoleInterface
      * @return bool|true
      * @throws AccessDeniedException
      */
-    public function allowsOrFail($permission)
+    public function allowsOrFail(string $permission)
     {
         if (! $this->can($permission))
             throw new AccessDeniedException('Access Denied.');

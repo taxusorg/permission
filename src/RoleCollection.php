@@ -31,7 +31,7 @@ class RoleCollection implements RoleCollectionInterface
         return key_exists($name, $this->role_names);
     }
 
-    public function check($permission) : bool
+    public function check(string $permission) : bool
     {
         foreach ($this as $item) {
             if ($item->check($permission))
@@ -41,12 +41,17 @@ class RoleCollection implements RoleCollectionInterface
         return false;
     }
 
-    public function can($permission) : bool
+    public function can(string $permission) : bool
     {
         return $this->check($permission);
     }
 
-    public function allowsOrFail($permission)
+    public function allows(string $permission): bool
+    {
+        return $this->check($permission);
+    }
+
+    public function allowsOrFail(string $permission)
     {
         foreach ($this as $item) {
             if ($item->allowsOrFail($permission))

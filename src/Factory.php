@@ -7,6 +7,11 @@ use Taxusorg\Permission\Contracts\RepositoryInterface;
 use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\UserInterface;
+use Taxusorg\Permission\Exceptions\AccessDeniedException;
+use Taxusorg\Permission\Exceptions\DefaultUserNotFound;
+use Taxusorg\Permission\Exceptions\PermissionDuplication;
+use Taxusorg\Permission\Exceptions\RoleDuplication;
+use Taxusorg\Permission\Exceptions\TypeError;
 
 class Factory implements FactoryInterface
 {
@@ -53,20 +58,20 @@ class Factory implements FactoryInterface
 
     /**
      * @param string $name
-     * @throws \Exception
+     * @throws PermissionDuplication
      */
     protected function pushPermission(string $name)
     {
         if ($this->isRegistered($name))
-            throw new \Exception("$name already exists");
+            throw new PermissionDuplication("$name already exists");
 
         array_push($this->permissions, $name);
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return $this
-     * @throws \Exception
+     * @throws PermissionDuplication
      */
     public function register(string $name)
     {
@@ -76,9 +81,9 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param $array
+     * @param iterable $array
      * @return $this
-     * @throws \Exception
+     * @throws PermissionDuplication
      */
     public function registerMany(iterable $array)
     {
@@ -100,13 +105,13 @@ class Factory implements FactoryInterface
 
     /**
      * @param integer|string $key
-     * @return Role|null
-     * @throws \Exception
+     * @return null|Role
+     * @throws TypeError
      */
     public function getRole($key)
     {
         if (! is_integer($key) && ! is_string($key))
-            throw new \Exception("param type error");
+            throw new TypeError("Role's key mast be integer or string.");
 
         return $this->resolverRole($this->repository->getRole($key));
     }
@@ -115,14 +120,14 @@ class Factory implements FactoryInterface
      * @param iterable $keys
      * @return RoleCollection
      */
-    public function getManyRoles(iterable $keys) : RoleCollection
+    public function getManyRoles(iterable $keys)
     {
         return $this->resolverRoleCollection($this->repository->getManyRoles($keys));
     }
 
     /**
      * @param string $name
-     * @return Role|null
+     * @return null|Role
      */
     public function getRoleByName(string $name)
     {
@@ -133,14 +138,14 @@ class Factory implements FactoryInterface
      * @param iterable $names
      * @return RoleCollection
      */
-    public function getManyRolesByNames(iterable $names) : RoleCollection
+    public function getManyRolesByNames(iterable $names)
     {
         return $this->resolverRoleCollection($this->repository->getManyRolesByNames($names));
     }
 
     /**
      * @param ResourceInterface|null $resource
-     * @return Role|null
+     * @return null|Role
      */
     protected function resolverRole(ResourceInterface $resource = null)
     {
@@ -165,8 +170,16 @@ class Factory implements FactoryInterface
         return $collection;
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws RoleDuplication
+     */
     public function addRole(string $name)
     {
+        if ($this->repository->getRoleByName($name))
+            throw new RoleDuplication("Role $name already exists.");
+
         return $this->repository->addRole($name);
     }
 
@@ -175,10 +188,16 @@ class Factory implements FactoryInterface
         return $this->repository->addManyRoles($names);
     }
 
+    /**
+     * @param string $old
+     * @param string $new
+     * @return mixed
+     * @throws RoleDuplication
+     */
     public function renameRole(string $old, string $new)
     {
         if ($this->repository->getRoleByName($new))
-            throw new \Exception("Role $new already exists.");
+            throw new RoleDuplication("Role $new already exists.");
 
         return $this->repository->renameRole($old, $new);
     }
@@ -204,14 +223,14 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param UserInterface|null $user
      * @return bool
-     * @throws \Exception
+     * @throws DefaultUserNotFound
      */
-    public function check($name, UserInterface $user = null)
+    public function check(string $name, UserInterface $user = null) : bool
     {
-        $user = $user ?: $this->user();
+        $user = $user ?: $this->defaultUser();
         if (! $user)
             return false;
 
@@ -225,19 +244,44 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param UserInterface|null $user
      * @return bool
-     * @throws \Exception
+     * @throws DefaultUserNotFound
      */
-    public function allows($name, UserInterface $user = null)
+    public function can(string $name, UserInterface $user = null): bool
     {
         return $this->check($name, $user);
     }
 
     /**
+     * @param string $name
+     * @param UserInterface|null $user
+     * @return bool
+     * @throws DefaultUserNotFound
+     */
+    public function allows(string $name, UserInterface $user = null) : bool
+    {
+        return $this->check($name, $user);
+    }
+
+    /**
+     * @param string $name
+     * @param UserInterface|null $user
+     * @return true
+     * @throws AccessDeniedException
+     * @throws DefaultUserNotFound
+     */
+    public function allowsOrFail(string $name, UserInterface $user = null)
+    {
+        if (! $this->check($name, $user))
+            throw new AccessDeniedException();
+
+        return true;
+    }
+
+    /**
      * @return UserInterface|null
-     * @throws \Exception
      */
     public function user() : UserInterface
     {
@@ -245,6 +289,18 @@ class Factory implements FactoryInterface
             return null;
 
         $user = call_user_func($this->userResolver());
+
+        return $user;
+    }
+
+    /**
+     * @return UserInterface
+     * @throws DefaultUserNotFound
+     */
+    protected function defaultUser()
+    {
+        if (! $user = $this->user())
+            throw new DefaultUserNotFound();
 
         return $user;
     }
@@ -298,7 +354,7 @@ class Factory implements FactoryInterface
      *
      * @return \Closure
      */
-    public function userResolver()
+    public function userResolver() : \Closure
     {
         return $this->userResolver;
     }
@@ -327,7 +383,7 @@ class Factory implements FactoryInterface
     /**
      * @return \Closure|null
      */
-    public function getBeforeChecking()
+    public function getBeforeChecking() : \Closure
     {
         return $this->beforeCheck;
     }

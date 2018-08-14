@@ -2,6 +2,8 @@
 
 namespace Taxusorg\Permission\Contracts;
 
+use Closure;
+
 interface FactoryInterface
 {
     /**
@@ -16,13 +18,13 @@ interface FactoryInterface
 
     /**
      * @param string $name
-     * @return void
+     * @return $this
      */
     public function register(string $name);
 
     /**
      * @param $array
-     * @return void
+     * @return $this
      */
     public function registerMany(Iterable $array);
 
@@ -37,14 +39,29 @@ interface FactoryInterface
      * @param UserInterface|null $user
      * @return boolean
      */
-    public function check($name, UserInterface $user = null);
+    public function check(string $name, UserInterface $user = null) : bool;
 
     /**
      * @param $name
      * @param UserInterface|null $user
      * @return boolean
      */
-    public function allows($name, UserInterface $user = null);
+    public function can(string $name, UserInterface $user = null) : bool;
+
+    /**
+     * @param $name
+     * @param UserInterface|null $user
+     * @return boolean
+     */
+    public function allows(string $name, UserInterface $user = null) : bool;
+
+    /**
+     * @param $name
+     * @param UserInterface|null $user
+     * @return true
+     * @throws \Taxusorg\Permission\Exceptions\AccessDeniedException
+     */
+    public function allowsOrFail(string $name, UserInterface $user = null);
 
     /**
      * @param $key
@@ -114,7 +131,7 @@ interface FactoryInterface
     public function deleteManyRolesByNames(iterable $names);
 
     /**
-     * @return \Closure
+     * @return Closure
      */
-    public function getBeforeChecking();
+    public function getBeforeChecking() : Closure;
 }
