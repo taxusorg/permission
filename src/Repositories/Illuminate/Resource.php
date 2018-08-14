@@ -7,8 +7,10 @@ use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\RepositoryInterface;
 use Taxusorg\Permission\Contracts\RoleCollectionInterface;
 
-class Role extends Model implements ResourceInterface, RepositoryInterface
+class Resource extends Model implements ResourceInterface, RepositoryInterface
 {
+    protected $table = 'roles';
+
     protected $fillable = ['name'];
 
     public function permits()
@@ -31,14 +33,14 @@ class Role extends Model implements ResourceInterface, RepositoryInterface
 
     /**
      * @param iterable $keys
-     * @return RoleCollection
+     * @return ResourceCollection
      */
-    public function getManyRoles(iterable $keys) : RoleCollection
+    public function getManyRoles(iterable $keys) : ResourceCollection
     {
         $result = $this->newQuery()->whereIn($this->getKeyName(), $keys)->get();
 
         if (! $result instanceof RoleCollectionInterface)
-            $result = new RoleCollection($result);
+            $result = new ResourceCollection($result);
 
         return $result;
     }
@@ -48,12 +50,12 @@ class Role extends Model implements ResourceInterface, RepositoryInterface
         return $this->newQuery()->where('name', $name)->first();
     }
 
-    public function getManyRolesByNames(iterable $names) : RoleCollection
+    public function getManyRolesByNames(iterable $names) : ResourceCollection
     {
         $result = $this->newQuery()->whereIn('name', $names)->get();
 
         if (! $result instanceof RoleCollectionInterface)
-            $result = new RoleCollection($result);
+            $result = new ResourceCollection($result);
 
         return $result;
     }
@@ -97,11 +99,11 @@ class Role extends Model implements ResourceInterface, RepositoryInterface
 
     /**
      * @param array $models
-     * @return RoleCollection
+     * @return ResourceCollection
      */
-    public function newCollection(array $models = []) : RoleCollection
+    public function newCollection(array $models = []) : ResourceCollection
     {
-        return new RoleCollection($models);
+        return new ResourceCollection($models);
     }
 
     public function getName() : string

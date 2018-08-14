@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
 
-class RoleCollection implements ResourceCollectionInterface
+class ResourceCollection implements ResourceCollectionInterface
 {
     protected $collection;
 

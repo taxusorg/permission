@@ -4,7 +4,7 @@ namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 use Taxusorg\Permission\Factory;
-use Taxusorg\Permission\Repositories\Illuminate\Role as RoleRepository;
+use Taxusorg\Permission\Repositories\Illuminate\Resource as RoleRepository;
 
 class SimpleTest extends TestCase
 {
