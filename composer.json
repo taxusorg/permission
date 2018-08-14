@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6.4"
+        "php": ">=7.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.4",
@@ -28,10 +28,5 @@
         }
     },
     "extra": {
-        "laravel": {
-            "providers": [
-                "Taxusorg\\Permission\\PermissionServiceProvider"
-            ]
-        }
     }
 }
