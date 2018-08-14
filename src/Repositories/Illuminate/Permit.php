@@ -10,6 +10,8 @@ class Permit extends Model
 
     protected $fillable = ['permit_key'];
 
+    public $timestamps = false;
+
     public function role()
     {
         return $this->belongsTo(Resource::class, 'role_id', 'id');

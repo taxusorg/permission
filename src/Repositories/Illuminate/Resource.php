@@ -13,6 +13,8 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
 
     protected $fillable = ['name'];
 
+    public $timestamps = false;
+
     public function permits()
     {
         return $this->hasMany(Permit::class, 'role_id', 'id');
