@@ -354,7 +354,7 @@ class Factory implements FactoryInterface
      *
      * @return \Closure
      */
-    public function userResolver() : \Closure
+    public function userResolver()
     {
         return $this->userResolver;
     }
@@ -383,7 +383,7 @@ class Factory implements FactoryInterface
     /**
      * @return \Closure|null
      */
-    public function getBeforeChecking() : \Closure
+    public function getBeforeChecking()
     {
         return $this->beforeCheck;
     }

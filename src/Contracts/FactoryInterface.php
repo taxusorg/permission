@@ -133,5 +133,5 @@ interface FactoryInterface
     /**
      * @return Closure
      */
-    public function getBeforeChecking() : Closure;
+    public function getBeforeChecking();
 }
