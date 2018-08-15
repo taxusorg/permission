@@ -3,6 +3,7 @@
 namespace Taxusorg\Permission\Repositories\Illuminate;
 
 use Illuminate\Database\Eloquent\Model;
+use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\RepositoryInterface;
 use Taxusorg\Permission\Contracts\RoleCollectionInterface;
@@ -37,7 +38,7 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
      * @param array $keys
      * @return ResourceCollection
      */
-    public function getManyRoles(array $keys) : ResourceCollection
+    public function getManyRoles(array $keys) : ResourceCollectionInterface
     {
         $result = $this->newQuery()->whereIn($this->getKeyName(), $keys)->get();
 
@@ -56,7 +57,7 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
      * @param array $names
      * @return ResourceCollection
      */
-    public function getManyRolesByNames(array $names) : ResourceCollection
+    public function getManyRolesByNames(array $names) : ResourceCollectionInterface
     {
         $result = $this->newQuery()->whereIn('name', $names)->get();
 
@@ -66,7 +67,7 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $result;
     }
 
-    public function addRole($name)
+    public function addRole(string $name)
     {
         return $this->newQuery()->firstOrCreate(['name' => $name])->getKey();
     }
@@ -101,7 +102,7 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $this->newQuery()->whereIn($this->getKeyName(), $ids)->delete();
     }
 
-    public function deleteRoleByName($name)
+    public function deleteRoleByName(string $name)
     {
         return $this->newQuery()->where('name', $name)->delete();
     }

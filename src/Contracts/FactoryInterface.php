@@ -61,11 +61,11 @@ interface FactoryInterface
      * @return true
      * @throws \Taxusorg\Permission\Exceptions\AccessDeniedException
      */
-    public function allowsOrFail(string $name, UserInterface $user = null);
+    public function allowsOrFail(string $name, UserInterface $user = null) : bool;
 
     /**
      * @param $key
-     * @return RoleInterface
+     * @return RoleInterface|null
      */
     public function getRole($key);
 
@@ -73,11 +73,11 @@ interface FactoryInterface
      * @param iterable $keys
      * @return RoleCollectionInterface
      */
-    public function getManyRoles($keys);
+    public function getManyRoles($keys) : RoleCollectionInterface;
 
     /**
      * @param string $name
-     * @return RoleInterface
+     * @return RoleInterface|null
      */
     public function getRoleByName(string $name);
 
@@ -85,7 +85,7 @@ interface FactoryInterface
      * @param iterable $names
      * @return RoleCollectionInterface
      */
-    public function getManyRolesByNames($names);
+    public function getManyRolesByNames($names) : RoleCollectionInterface;
 
     /**
      * @param string $name

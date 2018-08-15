@@ -14,7 +14,7 @@ interface RepositoryInterface
      * @param array $keys
      * @return ResourceCollectionInterface
      */
-    public function getManyRoles(array $keys);
+    public function getManyRoles(array $keys) : ResourceCollectionInterface;
 
     /**
      * @param $name
@@ -26,13 +26,13 @@ interface RepositoryInterface
      * @param array $names
      * @return ResourceCollectionInterface
      */
-    public function getManyRolesByNames(array $names);
+    public function getManyRolesByNames(array $names) : ResourceCollectionInterface;
 
     /**
-     * @param $name
+     * @param string $name
      * @return mixed $key
      */
-    public function addRole($name);
+    public function addRole(string $name);
 
     /**
      * @param array $names
@@ -63,7 +63,7 @@ interface RepositoryInterface
      * @param string $name
      * @return mixed
      */
-    public function deleteRoleByName($name);
+    public function deleteRoleByName(string $name);
 
     /**
      * @param array $names

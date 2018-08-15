@@ -6,6 +6,8 @@ use Taxusorg\Permission\Contracts\FactoryInterface;
 use Taxusorg\Permission\Contracts\RepositoryInterface;
 use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
 use Taxusorg\Permission\Contracts\ResourceInterface;
+use Taxusorg\Permission\Contracts\RoleCollectionInterface;
+use Taxusorg\Permission\Contracts\RoleInterface;
 use Taxusorg\Permission\Contracts\UserInterface;
 use Taxusorg\Permission\Exceptions\AccessDeniedException;
 use Taxusorg\Permission\Exceptions\DefaultUserNotFound;
@@ -125,7 +127,7 @@ class Factory implements FactoryInterface
      * @return RoleCollection
      * @throws TypeError
      */
-    public function getManyRoles($keys)
+    public function getManyRoles($keys) : RoleCollectionInterface
     {
         if (! is_array($keys) && ! $keys instanceof \Traversable)
             throw new TypeError("Keys mast be array or instanceof Traversable.");
@@ -147,7 +149,7 @@ class Factory implements FactoryInterface
      * @return RoleCollection
      * @throws TypeError
      */
-    public function getManyRolesByNames($names)
+    public function getManyRolesByNames($names) : RoleCollectionInterface
     {
         if (! is_array($names) && ! $names instanceof \Traversable)
             throw new TypeError("Names mast be array or instanceof Traversable.");
@@ -300,7 +302,7 @@ class Factory implements FactoryInterface
      * @throws AccessDeniedException
      * @throws DefaultUserNotFound
      */
-    public function allowsOrFail(string $name, UserInterface $user = null)
+    public function allowsOrFail(string $name, UserInterface $user = null) : bool
     {
         if (! $this->check($name, $user))
             throw new AccessDeniedException();
