@@ -2,6 +2,7 @@
 
 namespace Taxusorg\Permission\Repositories\Illuminate;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\RepositoryInterface;
@@ -165,6 +166,8 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         if (! is_array($permissions) && ! $permissions instanceof \Traversable)
             throw new TypeError("Permissions mast be array or instanceof Traversable.");
 
+        $permissions = $this->iterable2Array($permissions);
+
         $permissions = array_diff($permissions, $this->getPermits());
 
         if (! $permissions) return true;
@@ -190,6 +193,8 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         if (! is_array($permissions) && ! $permissions instanceof \Traversable)
             throw new TypeError("Permissions mast be array or instanceof Traversable.");
 
+        $permissions = $this->iterable2Array($permissions);
+
         $permissions = array_intersect($this->getPermits(), $permissions);
 
         $this->permits()->whereIn('permit_key', $permissions)->delete();
@@ -206,6 +211,8 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     {
         if (! is_array($permissions) && ! $permissions instanceof \Traversable)
             throw new TypeError("Permissions mast be array or instanceof Traversable.");
+
+        $permissions = $this->iterable2Array($permissions);
 
         $attach = array_diff($permissions, $this->getPermits());
         $detach = array_diff($this->getPermits(), $permissions);
@@ -226,6 +233,8 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         if (! is_array($permissions) && ! $permissions instanceof \Traversable)
             throw new TypeError("Permissions mast be array or instanceof Traversable.");
 
+        $permissions = $this->iterable2Array($permissions);
+
         $attach = array_diff($permissions, $this->getPermits());
         $detach = array_intersect($this->getPermits(), $permissions);
 
@@ -233,5 +242,27 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         $this->detach($detach);
 
         return true;
+    }
+
+    /**
+     * @param iterable $items
+     * @return array
+     */
+    protected function iterable2Array($items)
+    {
+        if (is_array($items))
+            return $items;
+
+        if ($items instanceof Arrayable)
+            return $items->toArray();
+
+        $array = [];
+
+        foreach ($items as $key => $item)
+        {
+            $array[$key] = $item;
+        }
+
+        return $array;
     }
 }
