@@ -5,7 +5,6 @@ namespace Taxusorg\Permission\Repositories\Illuminate;
 use Illuminate\Database\Eloquent\Collection;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
-use Taxusorg\Permission\Exceptions\TypeError;
 
 class ResourceCollection implements ResourceCollectionInterface
 {
