@@ -5,26 +5,26 @@ namespace Taxusorg\Permission\Contracts;
 interface ResourceSyncInterface
 {
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return boolean
      */
-    public function attach(iterable $permissions);
+    public function attach(array $permissions);
 
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return boolean
      */
-    public function detach(iterable $permissions);
+    public function detach(array $permissions);
 
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return boolean
      */
-    public function sync(iterable $permissions);
+    public function sync(array $permissions);
 
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return boolean
      */
-    public function toggle(iterable $permissions);
+    public function toggle(array $permissions);
 }
