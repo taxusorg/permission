@@ -8,31 +8,31 @@ interface RepositoryInterface
      * @param $key
      * @return ResourceInterface|null
      */
-    public function getRole($key);
+    public function getRole($key) : ?ResourceInterface;
 
     /**
      * @param array $keys
      * @return ResourceCollectionInterface
      */
-    public function getManyRoles(array $keys);
+    public function getManyRoles(array $keys) : ResourceCollectionInterface;
 
     /**
      * @param $name
      * @return ResourceInterface|null
      */
-    public function getRoleByName($name);
+    public function getRoleByName($name) : ?ResourceInterface;
 
     /**
      * @param array $names
      * @return ResourceCollectionInterface
      */
-    public function getManyRolesByNames(array $names);
+    public function getManyRolesByNames(array $names) : ResourceCollectionInterface;
 
     /**
-     * @param $name
+     * @param string $name
      * @return mixed $key
      */
-    public function addRole($name);
+    public function addRole(string $name);
 
     /**
      * @param array $names
@@ -63,7 +63,7 @@ interface RepositoryInterface
      * @param string $name
      * @return mixed
      */
-    public function deleteRoleByName($name);
+    public function deleteRoleByName(string $name);
 
     /**
      * @param array $names

@@ -6,6 +6,8 @@ use Taxusorg\Permission\Contracts\FactoryInterface;
 use Taxusorg\Permission\Contracts\RepositoryInterface;
 use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
 use Taxusorg\Permission\Contracts\ResourceInterface;
+use Taxusorg\Permission\Contracts\RoleCollectionInterface;
+use Taxusorg\Permission\Contracts\RoleInterface;
 use Taxusorg\Permission\Contracts\UserInterface;
 use Taxusorg\Permission\Exceptions\AccessDeniedException;
 use Taxusorg\Permission\Exceptions\DefaultUserNotFound;
@@ -108,7 +110,7 @@ class Factory implements FactoryInterface
      * @return null|Role
      * @throws TypeError
      */
-    public function getRole($key)
+    public function getRole($key) : ?RoleInterface
     {
         if (! is_integer($key) && ! is_string($key))
             throw new TypeError("Role's key mast be integer or string.");
@@ -120,7 +122,7 @@ class Factory implements FactoryInterface
      * @param iterable $keys
      * @return RoleCollection
      */
-    public function getManyRoles(iterable $keys)
+    public function getManyRoles(iterable $keys) : RoleCollectionInterface
     {
         return $this->resolverRoleCollection($this->repository->getManyRoles($keys));
     }
@@ -129,7 +131,7 @@ class Factory implements FactoryInterface
      * @param string $name
      * @return null|Role
      */
-    public function getRoleByName(string $name)
+    public function getRoleByName(string $name) : ?RoleInterface
     {
         return $this->resolverRole($this->repository->getRoleByName($name));
     }
@@ -138,7 +140,7 @@ class Factory implements FactoryInterface
      * @param iterable $names
      * @return RoleCollection
      */
-    public function getManyRolesByNames(iterable $names)
+    public function getManyRolesByNames(iterable $names) : RoleCollectionInterface
     {
         return $this->resolverRoleCollection($this->repository->getManyRolesByNames($names));
     }
@@ -272,7 +274,7 @@ class Factory implements FactoryInterface
      * @throws AccessDeniedException
      * @throws DefaultUserNotFound
      */
-    public function allowsOrFail(string $name, UserInterface $user = null)
+    public function allowsOrFail(string $name, UserInterface $user = null) : bool
     {
         if (! $this->check($name, $user))
             throw new AccessDeniedException();
