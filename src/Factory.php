@@ -185,6 +185,10 @@ class Factory implements FactoryInterface
         return $this->repository->addRole($name);
     }
 
+    /**
+     * @param iterable $names
+     * @return bool|void
+     */
     public function addManyRoles(iterable $names)
     {
         return $this->repository->addManyRoles($names);
@@ -219,6 +223,10 @@ class Factory implements FactoryInterface
         return $this->repository->deleteRoleByName($name);
     }
 
+    /**
+     * @param iterable $names
+     * @return mixed
+     */
     public function deleteManyRolesByNames(iterable $names)
     {
         return $this->repository->deleteManyRolesByNames($names);

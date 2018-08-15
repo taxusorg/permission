@@ -40,6 +40,10 @@ class ResourceCollection implements ResourceCollectionInterface
         return $this->collection->getIterator();
     }
 
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     */
     public function attach(iterable $permissions)
     {
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
@@ -47,6 +51,10 @@ class ResourceCollection implements ResourceCollectionInterface
         });
     }
 
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     */
     public function detach(iterable $permissions)
     {
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
@@ -54,6 +62,10 @@ class ResourceCollection implements ResourceCollectionInterface
         });
     }
 
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     */
     public function sync(iterable $permissions)
     {
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
@@ -61,6 +73,10 @@ class ResourceCollection implements ResourceCollectionInterface
         });
     }
 
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     */
     public function toggle(iterable $permissions)
     {
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {

@@ -54,6 +54,10 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $this->newQuery()->where('name', $name)->first();
     }
 
+    /**
+     * @param iterable $names
+     * @return ResourceCollection
+     */
     public function getManyRolesByNames(iterable $names) : ResourceCollectionInterface
     {
         $result = $this->newQuery()->whereIn('name', $names)->get();
@@ -69,6 +73,10 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $this->newQuery()->firstOrCreate(['name' => $name])->getKey();
     }
 
+    /**
+     * @param iterable $names
+     * @return bool|void
+     */
     public function addManyRoles(iterable $names)
     {
         foreach ($names as $name) {
@@ -86,6 +94,10 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $this->newQuery()->where($this->getKeyName(), $id)->delete();
     }
 
+    /**
+     * @param iterable $ids
+     * @return mixed
+     */
     public function deleteManyRoles(iterable $ids)
     {
         return $this->newQuery()->whereIn($this->getKeyName(), $ids)->delete();
@@ -96,6 +108,10 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $this->newQuery()->where('name', $name)->delete();
     }
 
+    /**
+     * @param iterable $names
+     * @return mixed
+     */
     public function deleteManyRolesByNames(iterable $names)
     {
         return $this->newQuery()->whereIn('name', $names)->delete();
