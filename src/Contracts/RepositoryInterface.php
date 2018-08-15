@@ -17,10 +17,10 @@ interface RepositoryInterface
     public function getManyRoles(array $keys) : ResourceCollectionInterface;
 
     /**
-     * @param $name
+     * @param string $name
      * @return ResourceInterface|null
      */
-    public function getRoleByName($name);
+    public function getRoleByName(string $name);
 
     /**
      * @param array $names
