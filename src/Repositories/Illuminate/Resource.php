@@ -49,7 +49,7 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $result;
     }
 
-    public function getRoleByName($name) : ?ResourceInterface
+    public function getRoleByName(string $name) : ?ResourceInterface
     {
         return $this->newQuery()->where('name', $name)->first();
     }
