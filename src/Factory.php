@@ -209,7 +209,7 @@ class Factory implements FactoryInterface
         return $this->repository->deleteRole($id);
     }
 
-    public function deleteManyRoles(array $ids)
+    public function deleteManyRoles(iterable $ids)
     {
         return $this->repository->deleteManyRoles($ids);
     }

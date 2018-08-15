@@ -11,10 +11,10 @@ interface RepositoryInterface
     public function getRole($key) : ?ResourceInterface;
 
     /**
-     * @param array $keys
+     * @param iterable $keys
      * @return ResourceCollectionInterface
      */
-    public function getManyRoles(array $keys) : ResourceCollectionInterface;
+    public function getManyRoles(iterable $keys) : ResourceCollectionInterface;
 
     /**
      * @param $name
@@ -23,10 +23,10 @@ interface RepositoryInterface
     public function getRoleByName($name) : ?ResourceInterface;
 
     /**
-     * @param array $names
+     * @param iterable $names
      * @return ResourceCollectionInterface
      */
-    public function getManyRolesByNames(array $names) : ResourceCollectionInterface;
+    public function getManyRolesByNames(iterable $names) : ResourceCollectionInterface;
 
     /**
      * @param string $name
@@ -35,10 +35,10 @@ interface RepositoryInterface
     public function addRole(string $name);
 
     /**
-     * @param array $names
+     * @param iterable $names
      * @return boolean|void
      */
-    public function addManyRoles(array $names);
+    public function addManyRoles(iterable $names);
 
     /**
      * @param string $old
@@ -54,10 +54,10 @@ interface RepositoryInterface
     public function deleteRole($id);
 
     /**
-     * @param array $ids
+     * @param iterable $ids
      * @return mixed
      */
-    public function deleteManyRoles(array $ids);
+    public function deleteManyRoles(iterable $ids);
 
     /**
      * @param string $name
@@ -66,8 +66,8 @@ interface RepositoryInterface
     public function deleteRoleByName(string $name);
 
     /**
-     * @param array $names
+     * @param iterable $names
      * @return mixed
      */
-    public function deleteManyRolesByNames(array $names);
+    public function deleteManyRolesByNames(iterable $names);
 }

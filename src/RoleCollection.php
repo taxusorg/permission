@@ -51,7 +51,7 @@ class RoleCollection implements RoleCollectionInterface
         return $this->check($permission);
     }
 
-    public function allowsOrFail(string $permission)
+    public function allowsOrFail(string $permission) : bool
     {
         foreach ($this as $item) {
             if ($item->allowsOrFail($permission))
