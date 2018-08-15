@@ -28,5 +28,5 @@ interface VerifiableInterface
      * @return true
      * @throws \Taxusorg\Permission\Exceptions\AccessDeniedException
      */
-    public function allowsOrFail(string $permission);
+    public function allowsOrFail(string $permission) : bool;
 }

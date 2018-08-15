@@ -23,10 +23,10 @@ interface FactoryInterface
     public function register(string $name);
 
     /**
-     * @param iterable $array
+     * @param array $array
      * @return $this
      */
-    public function registerMany($array);
+    public function registerMany(array $array);
 
     /**
      * @param string $name
@@ -70,10 +70,10 @@ interface FactoryInterface
     public function getRole($key);
 
     /**
-     * @param iterable $keys
+     * @param array $keys
      * @return RoleCollectionInterface
      */
-    public function getManyRoles($keys) : RoleCollectionInterface;
+    public function getManyRoles(array $keys) : RoleCollectionInterface;
 
     /**
      * @param string $name
@@ -82,10 +82,10 @@ interface FactoryInterface
     public function getRoleByName(string $name);
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return RoleCollectionInterface
      */
-    public function getManyRolesByNames($names) : RoleCollectionInterface;
+    public function getManyRolesByNames(array $names) : RoleCollectionInterface;
 
     /**
      * @param string $name
@@ -94,10 +94,10 @@ interface FactoryInterface
     public function addRole(string $name);
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return boolean|void
      */
-    public function addManyRoles($names);
+    public function addManyRoles(array $names);
 
     /**
      * @param string $old
@@ -125,10 +125,10 @@ interface FactoryInterface
     public function deleteRoleByName(string $name);
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return mixed
      */
-    public function deleteManyRolesByNames($names);
+    public function deleteManyRolesByNames(array $names);
 
     /**
      * @return Closure

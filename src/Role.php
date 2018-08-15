@@ -146,7 +146,7 @@ class Role implements RoleInterface
      * @return bool|true
      * @throws AccessDeniedException
      */
-    public function allowsOrFail(string $permission)
+    public function allowsOrFail(string $permission) : bool
     {
         if (! $this->can($permission))
             throw new AccessDeniedException('Access Denied.');

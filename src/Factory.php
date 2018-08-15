@@ -83,16 +83,12 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param iterable $array
+     * @param array $array
      * @return $this
      * @throws PermissionDuplication
-     * @throws TypeError
      */
-    public function registerMany($array)
+    public function registerMany(array $array)
     {
-        if (! is_array($array) && ! $array instanceof \Traversable)
-            throw new TypeError("Param mast be array or instanceof Traversable.");
-
         foreach ($array as $item) {
             $this->register($item);
         }
@@ -123,15 +119,11 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param iterable $keys
+     * @param array $keys
      * @return RoleCollection
-     * @throws TypeError
      */
-    public function getManyRoles($keys) : RoleCollectionInterface
+    public function getManyRoles(array $keys) : RoleCollectionInterface
     {
-        if (! is_array($keys) && ! $keys instanceof \Traversable)
-            throw new TypeError("Keys mast be array or instanceof Traversable.");
-
         return $this->resolverRoleCollection($this->repository->getManyRoles($keys));
     }
 
@@ -145,15 +137,11 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return RoleCollection
-     * @throws TypeError
      */
-    public function getManyRolesByNames($names) : RoleCollectionInterface
+    public function getManyRolesByNames(array $names) : RoleCollectionInterface
     {
-        if (! is_array($names) && ! $names instanceof \Traversable)
-            throw new TypeError("Names mast be array or instanceof Traversable.");
-
         return $this->resolverRoleCollection($this->repository->getManyRolesByNames($names));
     }
 
@@ -198,15 +186,11 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return bool|void
-     * @throws TypeError
      */
-    public function addManyRoles($names)
+    public function addManyRoles(array $names)
     {
-        if (! is_array($names) && ! $names instanceof \Traversable)
-            throw new TypeError("Names mast be array or instanceof Traversable.");
-
         return $this->repository->addManyRoles($names);
     }
 
@@ -240,15 +224,11 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return mixed
-     * @throws TypeError
      */
-    public function deleteManyRolesByNames($names)
+    public function deleteManyRolesByNames(array $names)
     {
-        if (! is_array($names) && ! $names instanceof \Traversable)
-            throw new TypeError("Names mast be array or instanceof Traversable.");
-
         return $this->repository->deleteManyRolesByNames($names);
     }
 
