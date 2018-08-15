@@ -8,23 +8,23 @@ interface ResourceSyncInterface
      * @param iterable $permissions
      * @return boolean
      */
-    public function attach(iterable $permissions);
+    public function attach($permissions);
 
     /**
      * @param iterable $permissions
      * @return boolean
      */
-    public function detach(iterable $permissions);
+    public function detach($permissions);
 
     /**
      * @param iterable $permissions
      * @return boolean
      */
-    public function sync(iterable $permissions);
+    public function sync($permissions);
 
     /**
      * @param iterable $permissions
      * @return boolean
      */
-    public function toggle(iterable $permissions);
+    public function toggle($permissions);
 }

@@ -5,6 +5,7 @@ namespace Taxusorg\Permission\Repositories\Illuminate;
 use Illuminate\Database\Eloquent\Collection;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\ResourceCollectionInterface;
+use Taxusorg\Permission\Exceptions\TypeError;
 
 class ResourceCollection implements ResourceCollectionInterface
 {
@@ -40,29 +41,61 @@ class ResourceCollection implements ResourceCollectionInterface
         return $this->collection->getIterator();
     }
 
-    public function attach(iterable $permissions)
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     * @throws TypeError
+     */
+    public function attach($permissions)
     {
+        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
+            throw new TypeError("Permissions mast be array or instanceof Traversable.");
+
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
             $resource->attach($permissions);
         });
     }
 
-    public function detach(iterable $permissions)
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     * @throws TypeError
+     */
+    public function detach($permissions)
     {
+        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
+            throw new TypeError("Permissions mast be array or instanceof Traversable.");
+
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
             $resource->detach($permissions);
         });
     }
 
-    public function sync(iterable $permissions)
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     * @throws TypeError
+     */
+    public function sync($permissions)
     {
+        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
+            throw new TypeError("Permissions mast be array or instanceof Traversable.");
+
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
             $resource->sync($permissions);
         });
     }
 
-    public function toggle(iterable $permissions)
+    /**
+     * @param iterable $permissions
+     * @return bool|void
+     * @throws TypeError
+     */
+    public function toggle($permissions)
     {
+        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
+            throw new TypeError("Permissions mast be array or instanceof Traversable.");
+
         $this->collection->each(function (ResourceInterface $resource) use ($permissions) {
             $resource->toggle($permissions);
         });

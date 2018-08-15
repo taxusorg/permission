@@ -14,7 +14,7 @@ interface RepositoryInterface
      * @param iterable $keys
      * @return ResourceCollectionInterface
      */
-    public function getManyRoles(iterable $keys);
+    public function getManyRoles($keys);
 
     /**
      * @param $name
@@ -26,7 +26,7 @@ interface RepositoryInterface
      * @param iterable $names
      * @return ResourceCollectionInterface
      */
-    public function getManyRolesByNames(iterable $names);
+    public function getManyRolesByNames($names);
 
     /**
      * @param $name
@@ -38,7 +38,7 @@ interface RepositoryInterface
      * @param iterable $names
      * @return boolean|void
      */
-    public function addManyRoles(iterable $names);
+    public function addManyRoles($names);
 
     /**
      * @param string $old
@@ -57,7 +57,7 @@ interface RepositoryInterface
      * @param iterable $ids
      * @return mixed
      */
-    public function deleteManyRoles(iterable $ids);
+    public function deleteManyRoles($ids);
 
     /**
      * @param string $name
@@ -69,5 +69,5 @@ interface RepositoryInterface
      * @param iterable $names
      * @return mixed
      */
-    public function deleteManyRolesByNames(iterable $names);
+    public function deleteManyRolesByNames($names);
 }

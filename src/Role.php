@@ -6,6 +6,7 @@ use Taxusorg\Permission\Contracts\FactoryInterface;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\RoleInterface;
 use Taxusorg\Permission\Exceptions\AccessDeniedException;
+use Taxusorg\Permission\Exceptions\TypeError;
 
 class Role implements RoleInterface
 {
@@ -38,6 +39,7 @@ class Role implements RoleInterface
     /**
      * @param string|array ...$permissions
      * @return bool
+     * @throws TypeError
      */
     public function attach(...$permissions)
     {
@@ -53,6 +55,7 @@ class Role implements RoleInterface
     /**
      * @param string|array ...$permissions string
      * @return bool
+     * @throws TypeError
      */
     public function detach(...$permissions)
     {
@@ -68,6 +71,7 @@ class Role implements RoleInterface
     /**
      * @param string|array ...$permissions
      * @return bool
+     * @throws TypeError
      */
     public function sync(...$permissions)
     {
@@ -83,6 +87,7 @@ class Role implements RoleInterface
     /**
      * @param string|array ...$permissions
      * @return boolean
+     * @throws TypeError
      */
     public function toggle(...$permissions)
     {
@@ -150,12 +155,16 @@ class Role implements RoleInterface
     }
 
     /**
-     * @param $params
+     * @param iterable $params
      * @param array|[] $data
      * @return array
+     * @throws TypeError
      */
-    protected function paramFormat(iterable $params, $data = [])
+    protected function paramFormat($params, $data = [])
     {
+        if (! is_array($params) && ! $params instanceof \Traversable)
+            throw new TypeError("Params mast be array or instanceof Traversable.");
+
         foreach ($params as $param) {
             if (is_string($param)) {
                 $data[] = $param;

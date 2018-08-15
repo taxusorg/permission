@@ -84,9 +84,13 @@ class Factory implements FactoryInterface
      * @param iterable $array
      * @return $this
      * @throws PermissionDuplication
+     * @throws TypeError
      */
-    public function registerMany(iterable $array)
+    public function registerMany($array)
     {
+        if (! is_array($array) && ! $array instanceof \Traversable)
+            throw new TypeError("Param mast be array or instanceof Traversable.");
+
         foreach ($array as $item) {
             $this->register($item);
         }
@@ -119,9 +123,13 @@ class Factory implements FactoryInterface
     /**
      * @param iterable $keys
      * @return RoleCollection
+     * @throws TypeError
      */
-    public function getManyRoles(iterable $keys)
+    public function getManyRoles($keys)
     {
+        if (! is_array($keys) && ! $keys instanceof \Traversable)
+            throw new TypeError("Keys mast be array or instanceof Traversable.");
+
         return $this->resolverRoleCollection($this->repository->getManyRoles($keys));
     }
 
@@ -137,9 +145,13 @@ class Factory implements FactoryInterface
     /**
      * @param iterable $names
      * @return RoleCollection
+     * @throws TypeError
      */
-    public function getManyRolesByNames(iterable $names)
+    public function getManyRolesByNames($names)
     {
+        if (! is_array($names) && ! $names instanceof \Traversable)
+            throw new TypeError("Names mast be array or instanceof Traversable.");
+
         return $this->resolverRoleCollection($this->repository->getManyRolesByNames($names));
     }
 
@@ -183,8 +195,16 @@ class Factory implements FactoryInterface
         return $this->repository->addRole($name);
     }
 
-    public function addManyRoles(iterable $names)
+    /**
+     * @param iterable $names
+     * @return bool|void
+     * @throws TypeError
+     */
+    public function addManyRoles($names)
     {
+        if (! is_array($names) && ! $names instanceof \Traversable)
+            throw new TypeError("Names mast be array or instanceof Traversable.");
+
         return $this->repository->addManyRoles($names);
     }
 
@@ -217,8 +237,16 @@ class Factory implements FactoryInterface
         return $this->repository->deleteRoleByName($name);
     }
 
-    public function deleteManyRolesByNames(iterable $names)
+    /**
+     * @param iterable $names
+     * @return mixed
+     * @throws TypeError
+     */
+    public function deleteManyRolesByNames($names)
     {
+        if (! is_array($names) && ! $names instanceof \Traversable)
+            throw new TypeError("Names mast be array or instanceof Traversable.");
+
         return $this->repository->deleteManyRolesByNames($names);
     }
 
