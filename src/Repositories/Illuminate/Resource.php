@@ -2,12 +2,10 @@
 
 namespace Taxusorg\Permission\Repositories\Illuminate;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Taxusorg\Permission\Contracts\ResourceInterface;
 use Taxusorg\Permission\Contracts\RepositoryInterface;
 use Taxusorg\Permission\Contracts\RoleCollectionInterface;
-use Taxusorg\Permission\Exceptions\TypeError;
 
 class Resource extends Model implements ResourceInterface, RepositoryInterface
 {
@@ -36,15 +34,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $keys
+     * @param array $keys
      * @return ResourceCollection
-     * @throws TypeError
      */
-    public function getManyRoles($keys) : ResourceCollection
+    public function getManyRoles(array $keys) : ResourceCollection
     {
-        if (! is_array($keys) && ! $keys instanceof \Traversable)
-            throw new TypeError("Keys mast be array or instanceof Traversable.");
-
         $result = $this->newQuery()->whereIn($this->getKeyName(), $keys)->get();
 
         if (! $result instanceof RoleCollectionInterface)
@@ -59,15 +53,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return ResourceCollection
-     * @throws TypeError
      */
-    public function getManyRolesByNames($names) : ResourceCollection
+    public function getManyRolesByNames(array $names) : ResourceCollection
     {
-        if (! is_array($names) && ! $names instanceof \Traversable)
-            throw new TypeError("Names mast be array or instanceof Traversable.");
-
         $result = $this->newQuery()->whereIn('name', $names)->get();
 
         if (! $result instanceof RoleCollectionInterface)
@@ -82,15 +72,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return bool|void
-     * @throws TypeError
      */
-    public function addManyRoles($names)
+    public function addManyRoles(array $names)
     {
-        if (! is_array($names) && ! $names instanceof \Traversable)
-            throw new TypeError("Names mast be array or instanceof Traversable.");
-
         foreach ($names as $name) {
             $this->newQuery()->firstOrCreate(['name' => $name]);
         }
@@ -107,15 +93,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $ids
+     * @param array $ids
      * @return mixed
-     * @throws TypeError
      */
-    public function deleteManyRoles($ids)
+    public function deleteManyRoles(array $ids)
     {
-        if (! is_array($ids) && ! $ids instanceof \Traversable)
-            throw new TypeError("Keys mast be array or instanceof Traversable.");
-
         return $this->newQuery()->whereIn($this->getKeyName(), $ids)->delete();
     }
 
@@ -125,15 +107,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return mixed
-     * @throws TypeError
      */
-    public function deleteManyRolesByNames($names)
+    public function deleteManyRolesByNames(array $names)
     {
-        if (! is_array($names) && ! $names instanceof \Traversable)
-            throw new TypeError("Names mast be array or instanceof Traversable.");
-
         return $this->newQuery()->whereIn('name', $names)->delete();
     }
 
@@ -157,17 +135,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return bool
-     * @throws TypeError
      */
-    public function attach($permissions)
+    public function attach(array $permissions)
     {
-        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
-            throw new TypeError("Permissions mast be array or instanceof Traversable.");
-
-        $permissions = $this->iterable2Array($permissions);
-
         $permissions = array_diff($permissions, $this->getPermits());
 
         if (! $permissions) return true;
@@ -184,17 +156,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return bool
-     * @throws TypeError
      */
-    public function detach($permissions)
+    public function detach(array $permissions)
     {
-        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
-            throw new TypeError("Permissions mast be array or instanceof Traversable.");
-
-        $permissions = $this->iterable2Array($permissions);
-
         $permissions = array_intersect($this->getPermits(), $permissions);
 
         $this->permits()->whereIn('permit_key', $permissions)->delete();
@@ -203,17 +169,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return bool
-     * @throws TypeError
      */
-    public function sync($permissions)
+    public function sync(array $permissions)
     {
-        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
-            throw new TypeError("Permissions mast be array or instanceof Traversable.");
-
-        $permissions = $this->iterable2Array($permissions);
-
         $attach = array_diff($permissions, $this->getPermits());
         $detach = array_diff($this->getPermits(), $permissions);
 
@@ -224,17 +184,11 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
     }
 
     /**
-     * @param iterable $permissions
+     * @param array $permissions
      * @return bool
-     * @throws TypeError
      */
-    public function toggle($permissions)
+    public function toggle(array $permissions)
     {
-        if (! is_array($permissions) && ! $permissions instanceof \Traversable)
-            throw new TypeError("Permissions mast be array or instanceof Traversable.");
-
-        $permissions = $this->iterable2Array($permissions);
-
         $attach = array_diff($permissions, $this->getPermits());
         $detach = array_intersect($this->getPermits(), $permissions);
 
@@ -242,27 +196,5 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         $this->detach($detach);
 
         return true;
-    }
-
-    /**
-     * @param iterable $items
-     * @return array
-     */
-    protected function iterable2Array($items)
-    {
-        if (is_array($items))
-            return $items;
-
-        if ($items instanceof Arrayable)
-            return $items->toArray();
-
-        $array = [];
-
-        foreach ($items as $key => $item)
-        {
-            $array[$key] = $item;
-        }
-
-        return $array;
     }
 }

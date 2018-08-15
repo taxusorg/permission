@@ -11,10 +11,10 @@ interface RepositoryInterface
     public function getRole($key);
 
     /**
-     * @param iterable $keys
+     * @param array $keys
      * @return ResourceCollectionInterface
      */
-    public function getManyRoles($keys);
+    public function getManyRoles(array $keys);
 
     /**
      * @param $name
@@ -23,10 +23,10 @@ interface RepositoryInterface
     public function getRoleByName($name);
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return ResourceCollectionInterface
      */
-    public function getManyRolesByNames($names);
+    public function getManyRolesByNames(array $names);
 
     /**
      * @param $name
@@ -35,10 +35,10 @@ interface RepositoryInterface
     public function addRole($name);
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return boolean|void
      */
-    public function addManyRoles($names);
+    public function addManyRoles(array $names);
 
     /**
      * @param string $old
@@ -54,10 +54,10 @@ interface RepositoryInterface
     public function deleteRole($id);
 
     /**
-     * @param iterable $ids
+     * @param array $ids
      * @return mixed
      */
-    public function deleteManyRoles($ids);
+    public function deleteManyRoles(array $ids);
 
     /**
      * @param string $name
@@ -66,8 +66,8 @@ interface RepositoryInterface
     public function deleteRoleByName($name);
 
     /**
-     * @param iterable $names
+     * @param array $names
      * @return mixed
      */
-    public function deleteManyRolesByNames($names);
+    public function deleteManyRolesByNames(array $names);
 }
