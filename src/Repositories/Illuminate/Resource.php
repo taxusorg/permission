@@ -68,6 +68,22 @@ class Resource extends Model implements ResourceInterface, RepositoryInterface
         return $result;
     }
 
+    /**
+     * @param string $permit
+     * @return ResourceCollectionInterface
+     */
+    public function getManyRolesByPermit(string $permit): ResourceCollectionInterface
+    {
+        $result = $this->newQuery()->whereHas('permits', function ($query) use ($permit) {
+            $query->where('permit_key', $permit);
+        })->get();
+
+        if (! $result instanceof RoleCollectionInterface)
+            $result = new ResourceCollection($result);
+
+        return $result;
+    }
+
     public function addRole(string $name)
     {
         return $this->newQuery()->firstOrCreate(['name' => $name])->getKey();

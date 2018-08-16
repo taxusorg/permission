@@ -29,6 +29,8 @@ class SimpleTest extends TestCase
         $roles->sync('test1', 'test2');
         $roles->roleA->attach('test3', 'test6');
 
+        $permit_roles = $factory->getManyRolesByPermit('test1');
+
         $this->assertTrue($roles->roleA->check('test1'));
         $this->assertTrue($roles->roleA->check('test2'));
         $this->assertTrue($roles->roleA->check('test3'));
