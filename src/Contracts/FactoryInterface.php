@@ -88,6 +88,12 @@ interface FactoryInterface
     public function getManyRolesByNames(array $names) : RoleCollectionInterface;
 
     /**
+     * @param string $permit
+     * @return RoleCollectionInterface
+     */
+    public function getManyRolesByPermit(string $permit) : RoleCollectionInterface;
+
+    /**
      * @param string $name
      * @return mixed $key
      */

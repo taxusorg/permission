@@ -146,6 +146,15 @@ class Factory implements FactoryInterface
     }
 
     /**
+     * @param string $permit
+     * @return RoleCollection
+     */
+    public function getManyRolesByPermit(string $permit): RoleCollectionInterface
+    {
+        return $this->resolverRoleCollection($this->repository->getManyRolesByPermit($permit));
+    }
+
+    /**
      * @param ResourceInterface|null $resource
      * @return null|Role
      */

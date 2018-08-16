@@ -29,6 +29,12 @@ interface RepositoryInterface
     public function getManyRolesByNames(array $names) : ResourceCollectionInterface;
 
     /**
+     * @param string $permit
+     * @return ResourceCollectionInterface
+     */
+    public function getManyRolesByPermit(string $permit) : ResourceCollectionInterface;
+
+    /**
      * @param string $name
      * @return mixed $key
      */
